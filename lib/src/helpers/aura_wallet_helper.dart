@@ -152,12 +152,18 @@ class AuraWalletHelper {
   /// Returns:
   ///   - `true` if the private key is valid, `false` otherwise.
   static bool checkPrivateKey(String privateKey) {
-    final List<int> deCodePrivateKey = HEX.decode(privateKey);
+    print('#Pyxis checkPrivateKey: $privateKey');
+    try {
+      final List<int> deCodePrivateKey = HEX.decode(privateKey);
 
-    Bip32EccCurve ecc = Bip32EccCurve();
+      Bip32EccCurve ecc = Bip32EccCurve();
 
-    return deCodePrivateKey.length == 32 &&
-        ecc.isPrivate(Uint8List.fromList(deCodePrivateKey));
+      return deCodePrivateKey.length == 32 &&
+          ecc.isPrivate(Uint8List.fromList(deCodePrivateKey));
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 
   static Future<Wallet> deriveWallet(

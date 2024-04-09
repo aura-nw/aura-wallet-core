@@ -82,16 +82,16 @@ class _CheckHDWalletBalanceState extends State<CheckHDWalletBalance> {
   }
 
   void doCheck() async {
-    errorMsg = null;
-    try {
-      final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
-      final String balance = await currentWallet?.checkWalletBalance() ?? '';
-      setState(() {
-        walletBalance = balance;
-      });
-    } catch (e) {
-      errorMsg = e.toString();
-    }
+    // errorMsg = null;
+    // try {
+    //   final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
+    //   final String balance = await currentWallet?.checkWalletBalance() ?? '';
+    //   setState(() {
+    //     walletBalance = balance;
+    //   });
+    // } catch (e) {
+    //   errorMsg = e.toString();
+    // }
   }
 
   void copyAddress() async {

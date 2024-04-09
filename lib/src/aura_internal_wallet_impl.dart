@@ -38,7 +38,7 @@ class AuraWalletCoreImpl implements AuraWalletCore {
   }) async {
     try {
       // Generate a random mnemonic with a strength of 256 bits.
-      final List<String> mnemonic = Bip39.generateMnemonic(strength: 256);
+      final List<String> mnemonic = Bip39.generateMnemonic(strength: 128);
 
       // Derive a wallet from the generated mnemonic.
       final Wallet wallet =

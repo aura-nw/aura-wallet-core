@@ -1,6 +1,6 @@
 name: aura_wallet_core
 description: A new Flutter package project.
-version: 0.0.1
+version: 0.0.5
 publish_to: none
 homepage:
 
@@ -28,7 +28,7 @@ dependencies:
     git:
       path: flutter_secure_storage
       url: https://github.com/aura-nw/flutter_secure_storage.git
-      ref: feature/biometric_mobile
+      ref: 7cd523aeaa35263ce2dbde265ec0f74975c1690b
 
 dev_dependencies:
   flutter_test:

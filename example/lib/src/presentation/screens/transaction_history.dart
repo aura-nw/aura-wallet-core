@@ -74,16 +74,16 @@ class _TransactionHistoryState extends State<TransactionHistory> {
   }
 
   Future<void> doLoadHistory() async {
-    try {
-      final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
-      final List<AuraTransaction> list =
-          await currentWallet!.getWalletHistory();
-      setState(() {
-        listData = list;
-      });
-    } catch (e) {
-      errorMsg = e.toString();
-    }
+    // try {
+    //   final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
+    //   final List<AuraTransaction> list =
+    //       await currentWallet!.getWalletHistory();
+    //   setState(() {
+    //     listData = list;
+    //   });
+    // } catch (e) {
+    //   errorMsg = e.toString();
+    // }
   }
 
   Widget createViewItem(AuraTransaction auraTransaction, AppTheme theme) {

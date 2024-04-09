@@ -158,57 +158,57 @@ class _MakeQuerySmartContractState extends State<MakeQuerySmartContract>
 
                       final currentWallet =
                           await AppGlobal.sdkCore.loadStoredWallet();
-                      await currentWallet!
-                          .makeQuerySmartContract(
-                            contractAddress: contractAddress,
-                            query: query,
-                          )
-                          .then((res) {
-                            final Map<String, dynamic> json = jsonDecode(res);
+                      // await currentWallet!
+                      //     .makeQuerySmartContract(
+                      //       contractAddress: contractAddress,
+                      //       query: query,
+                      //     )
+                      //     .then((res) {
+                      //       final Map<String, dynamic> json = jsonDecode(res);
 
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: SizedBox(
-                                    height: 250,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text('Balance : ${json['balance']}'),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          })
-                          .whenComplete(
-                            () => hideLoading(),
-                          )
-                          .onError((error, stackTrace) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Dialog(
-                                  child: SizedBox(
-                                    height: 100,
-                                    child: Center(
-                                      child: Text(error.toString()),
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          });
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (context) {
+                      //           return Dialog(
+                      //             child: SizedBox(
+                      //               height: 250,
+                      //               child: Column(
+                      //                 mainAxisSize: MainAxisSize.min,
+                      //                 children: [
+                      //                   Text('Balance : ${json['balance']}'),
+                      //                   const SizedBox(
+                      //                     height: 20,
+                      //                   ),
+                      //                   ElevatedButton(
+                      //                     onPressed: () =>
+                      //                         Navigator.pop(context),
+                      //                     child: const Text('OK'),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           );
+                      //         },
+                      //       );
+                      //     })
+                      //     .whenComplete(
+                      //       () => hideLoading(),
+                      //     )
+                      //     .onError((error, stackTrace) {
+                      //       showDialog(
+                      //         context: context,
+                      //         builder: (context) {
+                      //           return Dialog(
+                      //             child: SizedBox(
+                      //               height: 100,
+                      //               child: Center(
+                      //                 child: Text(error.toString()),
+                      //               ),
+                      //             ),
+                      //           );
+                      //         },
+                      //       );
+                      //     });
                     },
                     text: 'Query',
                   ),

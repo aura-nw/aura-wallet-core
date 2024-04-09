@@ -97,40 +97,40 @@ class _MakeTransactionPageState extends State<MakeTransactionPage>
     }
     showLoading();
     errorMsg = null;
-    try {
-      final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
-      final String amountStr = await currentWallet?.checkWalletBalance() ?? '';
-      double? amountData = double.tryParse(amountStr);
-      setState(() {
-        amount = amountData ?? 0;
-      });
-    } catch (e) {
-      errorMsg = e.toString();
-    } finally {
-      hideLoading();
-    }
+    // try {
+    //   final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
+    //   final String amountStr = await currentWallet?.checkWalletBalance() ?? '';
+    //   double? amountData = double.tryParse(amountStr);
+    //   setState(() {
+    //     amount = amountData ?? 0;
+    //   });
+    // } catch (e) {
+    //   errorMsg = e.toString();
+    // } finally {
+    //   hideLoading();
+    // }
   }
 
   void doSend() async {
     showLoading();
     try {
-      String toAddress = controller.textEditingController.text;
-      int amount = (controller.amount * 1000000).toInt();
+      // String toAddress = controller.textEditingController.text;
+      // int amount = (controller.amount * 1000000).toInt();
 
-      final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
+      // final currentWallet = await AppGlobal.sdkCore.loadStoredWallet();
 
-      final tx = await currentWallet!.sendTransaction(
-        toAddress: toAddress,
-        amount: amount.toString(),
-        fee: '200',
-        gasLimit: 200,
-      );
+      // final tx = await currentWallet!.sendTransaction(
+      //   toAddress: toAddress,
+      //   amount: amount.toString(),
+      //   fee: '200',
+      //   gasLimit: 200,
+      // );
 
-      final response = await currentWallet.submitTransaction(
-        signedTransaction: tx,
-      );
+      // final response = await currentWallet.submitTransaction(
+      //   signedTransaction: tx,
+      // );
 
-      print(response.txhash);
+      // print(response.txhash);
     } catch (e) {
       errorMsg = e.toString();
     }

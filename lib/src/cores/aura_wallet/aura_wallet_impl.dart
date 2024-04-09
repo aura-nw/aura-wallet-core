@@ -430,17 +430,23 @@ class AuraWalletImpl extends AuraWallet {
       // Handle the case where the passphrase is null and throw an AuraInternalError.
       throw AuraInternalError(ErrorCode.NullPassphrase, "Passphrase is null");
     }
+    print('#PYXIS privateKeyOrPassPhrase: $privateKeyOrPassPhrase');
     final Wallet wallet;
     if (AuraWalletHelper.checkPrivateKey(privateKeyOrPassPhrase)) {
+      print('#PYXIS privatekey: $privateKeyOrPassPhrase');
       wallet = Wallet.import(
         storehouse.configService.networkInfo,
         Uint8List.fromList(HEX.decode(privateKeyOrPassPhrase)),
       );
     } else {
+      print('#PYXIS not privatekey: $privateKeyOrPassPhrase');
+
       // Derive the wallet from the passphrase.
       wallet = Wallet.derive(privateKeyOrPassPhrase.split(' '),
           storehouse.configService.networkInfo);
     }
+
+    print('#PYXIS wallet: $wallet');
 
     try {
       // Sign the transaction.
@@ -454,6 +460,7 @@ class AuraWalletImpl extends AuraWallet {
 
       return signedTx;
     } catch (e) {
+      print('#PYXIS sendTransaction error: $e');
       // Handle any error that occurs during transaction signing.
       if (e is AuraInternalError) {
         rethrow;

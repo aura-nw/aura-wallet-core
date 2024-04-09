@@ -4,7 +4,7 @@ import 'package:aura_wallet_core/src/aura_internal_wallet_impl.dart';
 import 'package:aura_wallet_core/src/cores/aura_internal_storage.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/aura_internal_exception.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:aura_wallet_core/aura_wallet_core.dart';
+import 'package:aura_wallet_core/aura_wallet_core.dart' hide Duration;
 import 'package:mockito/annotations.dart';
 
 import 'aura_wallet_core_test.mocks.dart';

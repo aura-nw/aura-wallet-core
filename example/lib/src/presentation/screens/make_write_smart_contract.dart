@@ -180,46 +180,46 @@ class _MakeWriteSmartContractState extends State<MakeWriteSmartContract>
                       final currentWallet =
                           await AppGlobal.sdkCore.loadStoredWallet();
 
-                      await currentWallet!.makeInteractiveWriteSmartContract(
-                        contractAddress: contractAddress,
-                        executeMessage: executeMessage,
-                        fee: 200,
-                        gasLimit: 200,
-                        funds: [
-                          200,
-                        ],
-                      ).then((value) {
-                        hash = value;
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return const Dialog(
-                              child: SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: Text('Success!!!!!!'),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).onError((error, stackTrace) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: SizedBox(
-                                height: 100,
-                                child: Center(
-                                  child: Text(error.toString()),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }).whenComplete(
-                        () => hideLoading(),
-                      );
+                      // await currentWallet!.makeInteractiveWriteSmartContract(
+                      //   contractAddress: contractAddress,
+                      //   executeMessage: executeMessage,
+                      //   fee: 200,
+                      //   gasLimit: 200,
+                      //   funds: [
+                      //     200,
+                      //   ],
+                      // ).then((value) {
+                      //   hash = value;
+                      //   showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return const Dialog(
+                      //         child: SizedBox(
+                      //           height: 100,
+                      //           child: Center(
+                      //             child: Text('Success!!!!!!'),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //   );
+                      // }).onError((error, stackTrace) {
+                      //   showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return Dialog(
+                      //         child: SizedBox(
+                      //           height: 100,
+                      //           child: Center(
+                      //             child: Text(error.toString()),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //   );
+                      // }).whenComplete(
+                      //   () => hideLoading(),
+                      // );
                     },
                     text: 'Trigger',
                   ),
@@ -230,27 +230,27 @@ class _MakeWriteSmartContractState extends State<MakeWriteSmartContract>
                     onPress: () async {
                       showLoading();
                       try {
-                        final currentWallet =
-                            await AppGlobal.sdkCore.loadStoredWallet();
-                        await currentWallet!
-                            .verifyTxHash(txHash: hash)
-                            .then((isSuccess) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: SizedBox(
-                                  height: 100,
-                                  child: Center(
-                                    child: isSuccess
-                                        ? const Text('Success!!!!!!')
-                                        : const Text('Error!!!!!'),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
-                        });
+                        // final currentWallet =
+                        //     await AppGlobal.sdkCore.loadStoredWallet();
+                        // await currentWallet!
+                        //     .verifyTxHash(txHash: hash)
+                        //     .then((isSuccess) {
+                        //   showDialog(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return Dialog(
+                        //         child: SizedBox(
+                        //           height: 100,
+                        //           child: Center(
+                        //             child: isSuccess
+                        //                 ? const Text('Success!!!!!!')
+                        //                 : const Text('Error!!!!!'),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     },
+                        //   );
+                        // });
                       } catch (e) {
                         if (context.mounted) {
                           showDialog(
