@@ -1,4 +1,4 @@
-import 'package:alan/proto/google/protobuf/any.pb.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/google/protobuf/export.dart';
 
 class AuraTransaction {
   final String txHash;
@@ -7,7 +7,7 @@ class AuraTransaction {
   final String fee;
   final String type;
   final String? memo;
-  final Any ?msg;
+  final Any? msg;
 
   const AuraTransaction({
     required this.status,

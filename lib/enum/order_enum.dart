@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
-import 'package:alan/alan.dart';
+
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart';
 
 enum AuraTransactionOrderByType {
   ORDER_BY_UNSPECIFIED,

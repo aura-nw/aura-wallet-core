@@ -1,5 +1,3 @@
-import 'package:alan/alan.dart';
-import 'package:grpc/grpc.dart';
 import 'package:grpc/grpc_or_grpcweb.dart';
 
 final class AuraNetworkInfo {
@@ -32,20 +30,6 @@ final class AuraNetworkInfo {
       grpcTransportSecure: grpcTransportSecure,
       grpcWebPort: port,
       grpcWebTransportSecure: true,
-    );
-  }
-
-  NetworkInfo getNetworkInfo() {
-    return NetworkInfo(
-      bech32Hrp: bech32Hrp,
-      lcdInfo: LCDInfo(host: host),
-      grpcInfo: GRPCInfo(
-        host: host,
-        port: port,
-        credentials: host.contains('https')
-            ? const ChannelCredentials.secure()
-            : const ChannelCredentials.insecure(),
-      ),
     );
   }
 

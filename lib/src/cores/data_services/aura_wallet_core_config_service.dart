@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:aura_wallet_core/config_options/environment_options.dart';
-import 'package:alan/alan.dart';
 import 'package:aura_wallet_core/src/constants/config.dart';
+import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_network_info.dart';
 import 'package:grpc/grpc.dart';
 
 /// The [AuraWalletCoreConfigService] class provides configuration settings for the Aura Wallet Core SDK.
@@ -65,17 +65,7 @@ class AuraWalletCoreConfigService {
   String get lcdHost => _netWorkInfo['lcdHost'];
 
   /// Gets network information including Bech32 configuration, LCD and gRPC hosts, and gRPC port.
-  NetworkInfo get networkInfo => NetworkInfo(
-        bech32Hrp: becH32Config,
-        lcdInfo: LCDInfo(host: lcdHost),
-        grpcInfo: GRPCInfo(
-          host: grpcHost,
-          port: grpcPort,
-          credentials: grpcHost.contains('https')
-              ? const ChannelCredentials.secure()
-              : const ChannelCredentials.insecure(),
-        ),
-      );
+  AuraNetworkInfo get networkInfo => AuraNetworkInfo.testChannel;
 
   /// Gets the gRPC port for network communication.
   int get grpcPort => _netWorkInfo['grpcPort'];

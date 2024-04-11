@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:alan/alan.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/types/export.dart';
 import 'package:hex/hex.dart';
 import 'package:pointycastle/export.dart';
 import 'package:walletconnect_flutter_v2/apis/web3wallet/web3wallet.dart';

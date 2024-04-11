@@ -1,7 +1,8 @@
-import 'package:alan/alan.dart';
 import 'package:aura_wallet_core/aura_wallet_core.dart';
 import 'package:aura_wallet_core/config_options/config_options.dart';
 import 'package:aura_wallet_core/config_options/environment_options.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/utils/bip_39.dart';
+import 'package:aura_wallet_core/src/cosmos/hd_wallet.dart';
 import 'package:aura_wallet_core/src/cores/aura_internal_storage.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/aura_wallet_impl.dart';
 import 'package:aura_wallet_core/src/cores/data_services/aura_wallet_core_config_service.dart';
@@ -41,8 +42,8 @@ class AuraWalletCoreImpl implements AuraWalletCore {
       final List<String> mnemonic = Bip39.generateMnemonic(strength: 128);
 
       // Derive a wallet from the generated mnemonic.
-      final Wallet wallet =
-          Wallet.derive(mnemonic, storehouse.configService.networkInfo);
+      final HDWallet wallet = HDWallet.derive(
+          mnemonic, storehouse.configService.networkInfo.bech32Hrp);
 
       // Create and return a ComprehensiveWallet instance with the derived wallet details.
       return AuraWalletImpl(
@@ -135,11 +136,11 @@ class AuraWalletCoreImpl implements AuraWalletCore {
 
   Future<AuraWallet> _restoreWallet(
     String? passPhraseOrPrivateKey, [
-    Future<void> Function(Wallet)? callBack,
+    Future<void> Function(HDWallet)? callBack,
     String walletName = defaultWalletName,
   ]) async {
     // Derive a wallet from the provided passphrase.
-    final Wallet wallet = await AuraWalletHelper.deriveWallet(
+    final HDWallet wallet = await AuraWalletHelper.deriveWallet(
       passPhraseOrPrivateKey,
       storehouse,
     );

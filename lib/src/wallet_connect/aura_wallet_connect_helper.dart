@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:alan/alan.dart';
 import 'package:aura_wallet_core/aura_wallet_core.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/types/export.dart';
 import 'package:aura_wallet_core/src/cores/wallet_connect/data_model/std_sign_doc.dart';
+import 'package:crypto/crypto.dart';
 import 'package:hex/hex.dart';
 import 'package:pointycastle/export.dart';
-import 'package:crypto/src/sha256.dart';
-import 'package:walletconnect_flutter_v2/apis/models/json_rpc_request.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 
 class AuraWalletConnectHelper {
   static String createSignatureFromSignDoc(

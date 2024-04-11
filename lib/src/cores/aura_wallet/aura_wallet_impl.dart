@@ -1,22 +1,32 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:alan/alan.dart';
+import 'package:aura_wallet_core/src/cosmos/hd_wallet.dart';
+import 'package:aura_wallet_core/src/cosmos/tx_sender.dart';
 import 'package:aura_wallet_core/src/constants/aura_constants.dart';
 import 'package:aura_wallet_core/enum/order_enum.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/aura_wallet.dart';
+import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_network_info.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_transaction_info.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/types/export.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/aura_internal_exception.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/error_constants.dart';
 import 'package:aura_wallet_core/src/cores/repo/store_house.dart';
 import 'package:aura_wallet_core/src/debugs/grpc_logger.dart';
 import 'package:aura_wallet_core/src/helpers/aura_wallet_helper.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/abci/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/query/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart';
 import 'package:flutter/services.dart';
 
-import 'package:alan/proto/cosmos/bank/v1beta1/export.dart';
-import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
-import 'package:alan/proto/cosmwasm/wasm/v1/export.dart' as cosMWasm;
-import 'package:alan/proto/cosmos/tx/v1beta1/export.dart' as auraTx;
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/bank/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/bank/v1beta1/export.dart'
+    as bank;
+import 'package:aura_wallet_core/src/cosmos/proto/cosmwasm/wasm/v1/export.dart'
+    as cosMWasm;
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart'
+    as auraTx;
 import 'package:grpc/grpc.dart';
 import 'package:hex/hex.dart';
 
@@ -42,16 +52,16 @@ class AuraWalletImpl extends AuraWallet {
           privateKey: privateKey,
         ) {
     _txServiceClient = auraTx.ServiceClient(
-      storehouse.configService.networkInfo.gRPCChannel,
+      storehouse.configService.networkInfo.getChannel(),
       interceptors: [LogInter(storehouse)],
     );
 
     _bankQueryClient = bank.QueryClient(
-      storehouse.configService.networkInfo.gRPCChannel,
+      storehouse.configService.networkInfo.getChannel(),
       interceptors: [LogInter(storehouse)],
     );
     _cosWasmQueryClient = cosMWasm.QueryClient(
-      storehouse.configService.networkInfo.gRPCChannel,
+      storehouse.configService.networkInfo.getChannel(),
       interceptors: [LogInter(storehouse)],
     );
   }
@@ -69,7 +79,7 @@ class AuraWalletImpl extends AuraWallet {
   @override
   Future<TxResponse> submitTransaction({required Tx signedTransaction}) async {
     try {
-      final NetworkInfo networkInfo = storehouse.configService.networkInfo;
+      final AuraNetworkInfo networkInfo = storehouse.configService.networkInfo;
       final txSender = TxSender.fromNetworkInfo(networkInfo);
       final response = await txSender.broadcastTx(signedTransaction);
 
@@ -284,16 +294,15 @@ class AuraWalletImpl extends AuraWallet {
           ErrorCode.PassphraseNotFound, 'Passphrase not found');
     }
 
-    final Wallet wallet;
+    final HDWallet wallet;
     if (AuraWalletHelper.checkPrivateKey(privateKeyOrPassPhrase)) {
-      wallet = Wallet.import(
-        storehouse.configService.networkInfo,
-        Uint8List.fromList(HEX.decode(privateKeyOrPassPhrase)),
+      wallet = HDWallet.import(
+        bech32Hrp: '',
+        privateKey: Uint8List.fromList(HEX.decode(privateKeyOrPassPhrase)),
       );
     } else {
       // Derive the wallet from the passphrase.
-      wallet = Wallet.derive(privateKeyOrPassPhrase.split(' '),
-          storehouse.configService.networkInfo);
+      wallet = HDWallet.derive(privateKeyOrPassPhrase.split(' '), '');
     }
 
     // Create the message.
@@ -327,7 +336,7 @@ class AuraWalletImpl extends AuraWallet {
         amount: fee.toString(), gasLimit: gasLimit, denom: denom);
 
     // Get the network info.
-    final NetworkInfo networkInfo = storehouse.configService.networkInfo;
+    final AuraNetworkInfo networkInfo = storehouse.configService.networkInfo;
 
     // Sign the transaction.
     Tx tx = await AuraWalletHelper.signTransaction(
@@ -421,7 +430,7 @@ class AuraWalletImpl extends AuraWallet {
       denom: denom,
     );
 
-    final NetworkInfo networkInfo = storehouse.configService.networkInfo;
+    final AuraNetworkInfo networkInfo = storehouse.configService.networkInfo;
 
     String? privateKeyOrPassPhrase =
         await storehouse.storage.getWalletPassPhrase(walletName: walletName);
@@ -431,19 +440,19 @@ class AuraWalletImpl extends AuraWallet {
       throw AuraInternalError(ErrorCode.NullPassphrase, "Passphrase is null");
     }
     print('#PYXIS privateKeyOrPassPhrase: $privateKeyOrPassPhrase');
-    final Wallet wallet;
+    final HDWallet wallet;
     if (AuraWalletHelper.checkPrivateKey(privateKeyOrPassPhrase)) {
       print('#PYXIS privatekey: $privateKeyOrPassPhrase');
-      wallet = Wallet.import(
-        storehouse.configService.networkInfo,
-        Uint8List.fromList(HEX.decode(privateKeyOrPassPhrase)),
+      wallet = HDWallet.import(
+        bech32Hrp: networkInfo.bech32Hrp,
+        privateKey: Uint8List.fromList(HEX.decode(privateKeyOrPassPhrase)),
       );
     } else {
       print('#PYXIS not privatekey: $privateKeyOrPassPhrase');
 
       // Derive the wallet from the passphrase.
-      wallet = Wallet.derive(privateKeyOrPassPhrase.split(' '),
-          storehouse.configService.networkInfo);
+      wallet = HDWallet.derive(
+          privateKeyOrPassPhrase.split(' '), networkInfo.bech32Hrp);
     }
 
     print('#PYXIS wallet: $wallet');

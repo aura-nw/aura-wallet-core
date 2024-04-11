@@ -14,7 +14,7 @@ export 'src/helpers/aura_wallet_helper.dart';
 export 'src/wallet_connect/wallet_connect_service.dart';
 export 'src/wallet_connect/wallet_connect_service_utils.dart';
 export 'src/aura_core_helper.dart';
-export 'package:alan/types/export.dart';
+export 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart';
 
 /// An abstract class representing the core functionality of an Aura wallet.
 ///

@@ -1,19 +1,22 @@
 import 'dart:typed_data';
 
-import 'package:alan/alan.dart';
-import 'package:alan/proto/cosmos/bank/v1beta1/export.dart';
-import 'package:alan/proto/cosmos/base/v1beta1/export.dart';
-import 'package:alan/proto/cosmos/tx/v1beta1/export.dart';
-import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
-import 'package:alan/transactions/export.dart';
-import 'package:alan/wallet/network_info.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/types/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/bank/v1beta1/export.dart'
+    as bank;
 import 'package:aura_wallet_core/aura_wallet_core.dart';
+import 'package:aura_wallet_core/src/cosmos/hd_wallet.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/bank/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/abci/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/tx_sender.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_network_info.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/aura_internal_exception.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/error_constants.dart';
 import 'package:flutter/services.dart';
 import 'package:grpc/grpc.dart';
-import 'package:hex/hex.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart'
+    as tx;
 
 class AuraChainHelper {
   static Future<Tx> makeATransaction({
@@ -26,12 +29,11 @@ class AuraChainHelper {
     String? memo,
   }) async {
     print('##### makeATransaction ${auraNetworkInfo.bech32Hrp}');
-    final NetworkInfo networkInfo = auraNetworkInfo.getNetworkInfo();
-    print('##### networkInfo: ${networkInfo.bech32Hrp}');
     final privateKeyData =
         AuraWalletHelper.getPrivateKeyFromString(privateKeyOrPasspharse);
-    Wallet wallet =
-        Wallet.import(networkInfo, Uint8List.fromList(privateKeyData));
+    HDWallet wallet = HDWallet.import(
+        bech32Hrp: auraNetworkInfo.bech32Hrp,
+        privateKey: Uint8List.fromList(privateKeyData));
 
     String denom = auraNetworkInfo.denom;
     print('##### wallet.bech32Address: ${wallet.bech32Address}');
@@ -54,7 +56,7 @@ class AuraChainHelper {
     try {
       // Sign the transaction.
       Tx signedTx = await AuraWalletHelper.signTransaction(
-        networkInfo: networkInfo,
+        networkInfo: auraNetworkInfo,
         wallet: wallet,
         msgSend: [message],
         fee: feeData,
@@ -81,8 +83,7 @@ class AuraChainHelper {
       {required Tx signedTransaction,
       required AuraNetworkInfo auraNetworkInfo}) async {
     try {
-      final NetworkInfo networkInfo = auraNetworkInfo.getNetworkInfo();
-      final txSender = TxSender.fromNetworkInfo(networkInfo);
+      final txSender = TxSender.fromNetworkInfo(auraNetworkInfo);
       final response = await txSender.broadcastTx(signedTransaction);
 
       if (response.isSuccessful) {

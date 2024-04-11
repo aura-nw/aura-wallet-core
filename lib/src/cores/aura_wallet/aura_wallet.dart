@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:alan/alan.dart';
-import 'package:alan/proto/cosmos/tx/v1beta1/tx.pb.dart';
 import 'package:aura_wallet_core/src/constants/aura_constants.dart';
 import 'package:aura_wallet_core/enum/order_enum.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_transaction_info.dart';

@@ -1,8 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:alan/alan.dart';
-import 'package:alan/proto/tendermint/abci/types.pb.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/types/export.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/utils/bip_39.dart';
+import 'package:aura_wallet_core/src/cosmos/hd_wallet.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/base/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/proto/cosmos/tx/v1beta1/export.dart';
+import 'package:aura_wallet_core/src/cosmos/tx_signer.dart';
+import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_network_info.dart';
 import 'package:aura_wallet_core/src/cores/aura_wallet/entities/aura_transaction_info.dart';
+import 'package:aura_wallet_core/src/cosmos/cores/utils/bip_32.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/aura_internal_exception.dart';
 import 'package:aura_wallet_core/src/cores/exceptions/error_constants.dart';
 import 'package:aura_wallet_core/src/cores/repo/store_house.dart';
@@ -129,18 +135,19 @@ class AuraWalletHelper {
   /// Returns:
   ///   - A signed `Tx` object representing the transaction.
   static Future<Tx> signTransaction({
-    required NetworkInfo networkInfo,
-    required Wallet wallet,
+    required AuraNetworkInfo networkInfo,
+    required HDWallet wallet,
     required List<proto.GeneratedMessage> msgSend,
     required Fee fee,
     String? memo,
   }) async {
     final signer = TxSigner.fromNetworkInfo(networkInfo);
     final tx = await signer.createAndSign(
-      wallet,
-      msgSend,
+      wallet: wallet,
+      messages: msgSend,
       fee: fee,
       memo: memo,
+      chainId: networkInfo.chainId,
     );
     return tx;
   }
@@ -166,7 +173,7 @@ class AuraWalletHelper {
     }
   }
 
-  static Future<Wallet> deriveWallet(
+  static Future<HDWallet> deriveWallet(
       String? passPhraseOrPrivateKey, Storehouse storehouse) async {
     if (passPhraseOrPrivateKey == null) {
       throw AuraInternalError(
@@ -177,9 +184,9 @@ class AuraWalletHelper {
     try {
       if (AuraWalletHelper.checkMnemonic(mnemonic: passPhraseOrPrivateKey)) {
         // Derive a wallet from the stored passphrase.
-        final Wallet wallet = Wallet.derive(
+        final HDWallet wallet = HDWallet.derive(
           passPhraseOrPrivateKey.split(' '),
-          storehouse.configService.networkInfo,
+          storehouse.configService.networkInfo.bech32Hrp,
         );
         return wallet;
       } else {
@@ -192,9 +199,9 @@ class AuraWalletHelper {
           );
         }
 
-        final wallet = Wallet.import(
-          storehouse.configService.networkInfo,
-          Uint8List.fromList(privateKey),
+        final wallet = HDWallet.import(
+          bech32Hrp: storehouse.configService.networkInfo.bech32Hrp,
+          privateKey: Uint8List.fromList(privateKey),
         );
 
         return wallet;
