@@ -18,9 +18,12 @@ abstract class Chain {
   }
 
   ChainType get chainType;
+
   Future<String> getWalletBalance({required String address});
+
   Future<List<TransactionDetail>> getTransactionHistory(
       {required String address});
+
   Future<TransactionDetail?> getBlockDetail({required String txHash});
 }
 
@@ -34,7 +37,10 @@ class _CustomChain extends Chain {
       case ChainType.cosmos:
         return CosmosBlockDetail().call();
       case ChainType.ethereum:
-        return EvmBlockDetail().call();
+        return EvmBlockDetail(
+          hash: txHash,
+          rpcUrl: rpcUrl,
+        ).call();
       default:
         throw UnimplementedError();
     }
@@ -59,7 +65,10 @@ class _CustomChain extends Chain {
       case ChainType.cosmos:
         return CosmosWalletBalance(rpcUrl: rpcUrl).call();
       case ChainType.ethereum:
-        return EvmWalletBalance(rpcUrl: rpcUrl).call();
+        return EvmWalletBalance(
+          rpcUrl: rpcUrl,
+          address: address,
+        ).call();
       default:
         throw UnimplementedError();
     }

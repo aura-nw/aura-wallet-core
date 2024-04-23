@@ -8,6 +8,6 @@ class EvmTransactionHistory implements TransactionHistory {
 
   @override
   Future<List<TransactionDetail>> call() {
-    throw UnimplementedError();
+    throw 'Evm does not support transaction history';
   }
 }
