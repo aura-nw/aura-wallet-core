@@ -22,6 +22,9 @@ class EvmWalletBalance implements WalletBalance {
       EthereumAddress.fromHex(address),
     );
 
-    return amount.getInEther.toString();
+    var bigInt = BigInt.from(10).pow(18);
+    var balance = amount.getInWei / bigInt;
+
+    return balance.toString();
   }
 }

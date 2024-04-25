@@ -33,11 +33,9 @@ to `/example` folder.
 #### Chain
 ```dart
 
-    Chain chain = Chain.evm( .... );
-    Chain chain = Chain.cosmos(...);
+    Chain chain = Chain.from(rpcUrl : rpcUrl);
 
     chain.getWalletBalance(address:'');
-    chain.getTransactionHistory(address : '');
     chain.getBlockDetail(txHash : '');
     
 ```

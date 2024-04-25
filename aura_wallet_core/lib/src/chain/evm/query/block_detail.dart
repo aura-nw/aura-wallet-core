@@ -19,11 +19,15 @@ class EvmBlockDetail implements BlockDetail {
       http.Client(),
     );
 
-    final TransactionInformation ?tx = await client.getTransactionByHash(hash);
+    final TransactionInformation? tx = await client.getTransactionByHash(hash);
 
-    if(tx == null){
+    if (tx == null) {
       throw 'Transaction $hash not found';
     }
-    return TransactionDetail();
+    TransactionDetail transactionDetail = TransactionDetail();
+    transactionDetail.raw = tx;
+    transactionDetail.txHash = tx.hash;
+    transactionDetail.from = tx.from.toString();
+    return transactionDetail;
   }
 }
