@@ -6,7 +6,7 @@ import 'package:web3dart/web3dart.dart';
 
 abstract class Chain {
   static Chain from({required String rpcUrl}) {
-    return _EvmChain(rpcUrl: rpcUrl);
+    return EvmChain(rpcUrl: rpcUrl);
   }
 
   Future<String> getWalletBalance({required String address});
@@ -26,13 +26,15 @@ abstract class Chain {
     Uint8List? data,
   });
 
-  Future<String> sendRawTransaction(Uint8List signedTransaction);
+  Future<String> sendRawTransaction(Uint8List? signedTransaction);
+
+  Future<int> getNonce({required String? address});
 }
 
-class _EvmChain implements Chain {
+class EvmChain implements Chain {
   final Web3Client _client;
 
-  _EvmChain({required String rpcUrl}) : _client = Web3Client(rpcUrl, Client());
+  EvmChain({required String rpcUrl}) : _client = Web3Client(rpcUrl, Client());
 
   @override
   Future<String> getWalletBalance({required String address}) async {
@@ -51,7 +53,7 @@ class _EvmChain implements Chain {
       {required String txHash}) async {
     var tx = await _client.getTransactionByHash(txHash);
     if (tx == null) {
-      throw 'Transaction $hash not found';
+      throw 'Transaction $tx not found';
     }
     TransactionDetail transactionDetail = TransactionDetail();
     transactionDetail.raw = tx;
@@ -88,7 +90,18 @@ class _EvmChain implements Chain {
   }
 
   @override
-  Future<String> sendRawTransaction(Uint8List signedTransaction) {
+  Future<String> sendRawTransaction(Uint8List? signedTransaction) {
+    if (signedTransaction == null) {
+      throw ArgumentError('signedTransaction cannot be null');
+    }
     return _client.sendRawTransaction(signedTransaction);
+  }
+
+  @override
+  Future<int> getNonce({required String? address}) async {
+    if (address == null) {
+      throw ArgumentError('address cannot be null');
+    }
+    return await _client.getTransactionCount(EthereumAddress.fromHex(address));
   }
 }

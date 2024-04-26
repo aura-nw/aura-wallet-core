@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
-import 'package:evm_wallet_core/src/crypto/extensions/ext_bigint.dart';
-import 'package:evm_wallet_core/src/crypto/extensions/ext_uint8list.dart';
+import 'package:evm_wallet_core/src/crypto/utils/extensions/ext_bigint.dart';
+import 'package:evm_wallet_core/src/crypto/utils/extensions/ext_uint8list.dart';
 import 'package:pointycastle/export.dart';
 
 class Bip32 {
