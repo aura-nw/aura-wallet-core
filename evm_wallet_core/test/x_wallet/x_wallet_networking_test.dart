@@ -34,6 +34,7 @@ void main() {
 
     test('should call chain.transfer ', () async {
       final to = '0xd37A0EaB4918b5d72fE7633c3dA62E55BC47e1c5';
+      
       final amount = BigInt.from(10).pow(6);
       final txHash = await xWallet.transfer(
           to: to,

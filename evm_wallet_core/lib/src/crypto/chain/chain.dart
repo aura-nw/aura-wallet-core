@@ -126,7 +126,8 @@ class EvmChain implements Chain {
 
   @override
   Future<Uint8List> signTransaction(
-      {required Credentials cred, required Transaction transaction}) {
-    return _client.signTransaction(cred, transaction);
+      {required Credentials cred, required Transaction transaction}) async {
+    var chainId = await getChainId();
+    return _client.signTransaction(cred, transaction, chainId: chainId.toInt());
   }
 }
