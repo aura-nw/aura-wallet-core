@@ -6,7 +6,7 @@ import '../crypto/utils/bip_32.dart';
 import '../crypto/utils/bip_39.dart';
 
 class HDWallet extends EthSigner {
-  static const derivationPath = "m/44'/118'/0'/0/0";
+  static const derivationPath = "m/44'/60'/0'/0/0";
 
   HDWallet._(Credentials credentials) : super(credentials);
 

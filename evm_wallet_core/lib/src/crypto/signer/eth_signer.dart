@@ -6,7 +6,7 @@ import 'package:web3dart/web3dart.dart';
 
 class EthSigner {
   final Credentials _credentials;
-  // Credentials get credential => _credentials;
+  Credentials get credential => _credentials;
   EthSigner(this._credentials);
 
   String getAddress() {

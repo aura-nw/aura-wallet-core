@@ -20,24 +20,39 @@ class XWallet {
   }
 
   Future<String> transfer(
-      {required String to, required BigInt amount, int maxGas = 100000}) async {
-    final nonce = await getNonce();
-    final gasPrice = await chain.estimateGas(
-      senderAddress: hdWallet.getAddress(),
-      toAddress: to,
-      value: amount,
-    );
-
+      {required String to,
+      required BigInt amount,
+      int? maxGas,
+      required BigInt gasPrice}) async {
+    print('address = ${hdWallet.getAddress()}');
     Transaction transaction = Transaction(
       to: EthereumAddress.fromHex(to),
       value: EtherAmount.inWei(amount),
-      maxGas: maxGas,
+      maxGas: 100000,
       gasPrice: EtherAmount.inWei(gasPrice),
-      nonce: nonce,
     );
 
-    final signedTransaction = await hdWallet.signMessage(transaction.data!);
-    return chain.sendRawTransaction(signedTransaction);
+    String dx = await chain
+        .getW3Client()
+        .sendTransaction(hdWallet.credential, transaction);
+    // final signedTransaction = await chain.signTransaction(
+    //     cred: hdWallet.credential, transaction: transaction);
+
+    // final nonce = await getNonce();
+    // final estimatedGas = await chain.estimateGas(
+    //   senderAddress: hdWallet.getAddress(),
+    //   toAddress: to,
+    //   value: amount,
+    //   gasPrice: gasPrice,
+    // );
+
+    // var chainId = await chain.getChainId();
+
+    // final signedTransaction = await hdWallet.signMessage(
+    //     transaction.getUnsignedSerialized(),
+    //     chainId: chainId.toInt());
+    // return chain.sendRawTransaction(signedTransaction);
+    return dx;
   }
 
   Future<String> execute(

@@ -9,6 +9,9 @@ abstract class Chain {
     return EvmChain(rpcUrl: rpcUrl);
   }
 
+  /// For debug only, remove later
+  /// TODO remove this method
+  Web3Client getW3Client();
   Future<String> getWalletBalance({required String address});
 
   Future<TransactionDetail?> getTransactionDetail({required String txHash});
@@ -19,7 +22,6 @@ abstract class Chain {
     String? senderAddress,
     String? toAddress,
     BigInt? value,
-    BigInt? amountOfGas,
     BigInt? gasPrice,
     BigInt? maxPriorityFeePerGas,
     BigInt? maxFeePerGas,
@@ -29,10 +31,15 @@ abstract class Chain {
   Future<String> sendRawTransaction(Uint8List? signedTransaction);
 
   Future<int> getNonce({required String? address});
+
+  Future<Uint8List> signTransaction(
+      {required Credentials cred, required Transaction transaction});
 }
 
 class EvmChain implements Chain {
   final Web3Client _client;
+  @override
+  Web3Client getW3Client() => _client;
 
   EvmChain({required String rpcUrl}) : _client = Web3Client(rpcUrl, Client());
 
@@ -67,19 +74,30 @@ class EvmChain implements Chain {
     String? senderAddress,
     String? toAddress,
     BigInt? value,
-    BigInt? amountOfGas,
     BigInt? gasPrice,
     BigInt? maxPriorityFeePerGas,
     BigInt? maxFeePerGas,
     Uint8List? data,
   }) {
+    var inputFromAddress =
+        senderAddress != null ? EthereumAddress.fromHex(senderAddress) : null;
+    var inputToAddress =
+        toAddress != null ? EthereumAddress.fromHex(toAddress) : null;
+    var inputValue = value != null ? EtherAmount.inWei(value) : null;
+    var inputGas = gasPrice != null ? EtherAmount.inWei(gasPrice) : null;
+    var inputMaxPriorityFeePerGas = maxPriorityFeePerGas != null
+        ? EtherAmount.inWei(maxPriorityFeePerGas)
+        : null;
+    var inputMaxFeePerGas =
+        maxFeePerGas != null ? EtherAmount.inWei(maxFeePerGas) : null;
+
     return _client.estimateGas(
-      sender: EthereumAddress.fromHex(senderAddress!),
-      to: EthereumAddress.fromHex(toAddress!),
-      value: EtherAmount.inWei(value!),
-      gasPrice: EtherAmount.inWei(gasPrice!),
-      maxPriorityFeePerGas: EtherAmount.inWei(maxPriorityFeePerGas!),
-      maxFeePerGas: EtherAmount.inWei(maxFeePerGas!),
+      sender: inputFromAddress,
+      to: inputToAddress,
+      value: inputValue,
+      gasPrice: inputGas,
+      maxPriorityFeePerGas: inputMaxPriorityFeePerGas,
+      maxFeePerGas: inputMaxFeePerGas,
       data: data,
     );
   }
@@ -94,6 +112,7 @@ class EvmChain implements Chain {
     if (signedTransaction == null) {
       throw ArgumentError('signedTransaction cannot be null');
     }
+
     return _client.sendRawTransaction(signedTransaction);
   }
 
@@ -103,5 +122,11 @@ class EvmChain implements Chain {
       throw ArgumentError('address cannot be null');
     }
     return await _client.getTransactionCount(EthereumAddress.fromHex(address));
+  }
+
+  @override
+  Future<Uint8List> signTransaction(
+      {required Credentials cred, required Transaction transaction}) {
+    return _client.signTransaction(cred, transaction);
   }
 }
