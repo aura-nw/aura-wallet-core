@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:evm_wallet_core/src/hd_wallet/hd_wallet.dart';
+import 'package:evm_wallet_core/src/core/hd_wallet.dart';
 
 void main() {
   test('HDWallet test', () async {
@@ -12,11 +12,15 @@ void main() {
     HDWallet walletFromMnemonic = HDWallet.fromMnemonic(mnemonic);
     expect(walletFromMnemonic, isNotNull);
 
+    print('Address: ${walletFromMnemonic.getAddress()}');
+
     // Test fromPrivateKey
     String privateKey =
         '0efa69752f32517451fe704153d223e5cd9c496346c42207ef73d288227447b3';
     HDWallet walletFromPrivateKey = HDWallet.fromPrivateKey(privateKey);
     expect(walletFromPrivateKey, isNotNull);
+
+    print('Address: ${walletFromPrivateKey.getAddress()}');
 
     expect(walletFromMnemonic.getAddress(), walletFromPrivateKey.getAddress());
 
@@ -30,8 +34,8 @@ void main() {
 
     // Test signMessage
     Uint8List message = Uint8List.fromList([1, 2, 3]);
-    Uint8List signature = await walletFromMnemonic.signMessage(message);
-    expect(signature, isNotNull);
+    // // Uint8List signature = await walletFromMnemonic.signMessage(message);
+    // expect(signature, isNotNull);
 
     // // Test verifySignature
     // EthereumAddress ethAddress = EthereumAddress.fromHex(address);

@@ -1,6 +1,6 @@
-import 'package:evm_wallet_core/src/x_wallet/x_wallet.dart';
-import 'package:evm_wallet_core/src/crypto/chain/chain.dart';
-import 'package:evm_wallet_core/src/hd_wallet/hd_wallet.dart';
+import 'package:evm_wallet_core/src/core/chain.dart';
+import 'package:evm_wallet_core/src/core/hd_wallet.dart';
+import 'package:evm_wallet_core/src/aura/aura_wallet.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // Create mocks for Chain and HDWallet classes
@@ -12,31 +12,31 @@ void main() {
   group('XWallet - getBalance', () {
     late Chain chain;
     late HDWallet hdWallet;
-    late XWallet xWallet;
+    late AuraWallet auraWallet;
 
     setUp(() {
       chain = Chain.from(rpcUrl: rpcUrl);
       hdWallet = HDWallet.fromPrivateKey(privateKey);
-      xWallet = XWallet(chain: chain, hdWallet: hdWallet);
+      auraWallet = AuraWallet(chain: chain, hdWallet: hdWallet);
     });
 
     test('should call chain.getWalletBalance and return the balance', () async {
-      final balance = await xWallet.getBalance();
+      final balance = await auraWallet.getBalance();
       print('Balance: $balance');
       expect(balance, isNotNull);
     });
 
     test('should call chain.getNonce and return the nonce', () async {
-      final nonce = await xWallet.getNonce();
+      final nonce = await auraWallet.getNonce();
       print('Nonce: $nonce');
       expect(nonce, isNotNull);
     });
 
     test('should call chain.transfer ', () async {
       final to = '0xd37A0EaB4918b5d72fE7633c3dA62E55BC47e1c5';
-      
+
       final amount = BigInt.from(10).pow(6);
-      final txHash = await xWallet.transfer(
+      final txHash = await auraWallet.transfer(
           to: to,
           amount: amount,
           maxGas: 1000000,

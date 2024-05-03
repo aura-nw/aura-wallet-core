@@ -1,4 +1,4 @@
-import 'package:evm_wallet_core/src/crypto/chain/chain.dart';
+import 'package:evm_wallet_core/src/core/chain.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

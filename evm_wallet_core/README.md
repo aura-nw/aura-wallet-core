@@ -32,14 +32,24 @@ to `/example` folder.
 
 #### Chain
 ```dart
-
     Chain chain = Chain.from(rpcUrl : rpcUrl);
 
     chain.getWalletBalance(address:'');
-    chain.getBlockDetail(txHash : '');
-    
+    chain.getBlockDetail(txHash : '');    
 ```
 
+#### Aura Chain
+```dart
+    Chain chain = AuraEvm.dev;
+    Chain chain = AuraEvm.serenity;
+    Chain chain = AuraEvm.euphoria;
+    Chain chain = AuraEvm.xstaxy;
+
+    Chain chain = AuraChain.custom('rpcUrl');
+
+    chain.getWalletBalance(address:'');
+    chain.getBlockDetail(txHash : '');
+```
 
 #### HDWallet
 ```dart
@@ -47,86 +57,44 @@ to `/example` folder.
     HDWallet hdWallet = HDWallet.fromPrivateKey(privateKey : '');
     HDWallet hdWallet = HDWallet.fromMnemonic(mnemonic : '');
 
-    /// Default chgainId = AuraCosmos.xstaxy.chainId 
-    hdWallet.getAddress(chainId : chain.chainId); 
+    hdWallet.getAddress(); 
     hdWallet.getPrivateKey();
     
     print(hdWallet)
 ```
 
+#### Aura Wallet
+```dart
+    AuraWallet auraWallet = AuraWallet(chain, hdWallet);
+    AuraWallet auraWallet = AuraWallet.fromPrivateKey(privateKey, rpcUrl);
+
+    auraWallet.getBalance(); 
+    auraWallet.getNonce();
+```
 
 #### Transactions
 ```dart
-   TransactionRequest transactionRequest = TransactionRequest.makeTransferRequest(toAddress : '', amount : 10, memo : '');
+   AuraTransactionRequest transactionRequest = AuraTransactionRequest.makeTransferRequest(toAddress : '', amount : 10, memo : '');
+   AuraTransactionRequest transactionRequest = AuraTransactionRequest.makeWithDrawRequest(????);
+   AuraTransactionRequest transactionRequest = AuraTransactionRequest.makeDeployRequest(?????);
+   AuraTransactionRequest transactionRequest = AuraTransactionRequest.makeMintRequest(????);
+   AuraTransactionRequest transactionRequest = AuraTransactionRequest.makeExecuteRequest(addressContract : '', params : ['':'']);
 
-   TransactionRequest transactionRequest = TransactionRequest.makeWithDrawRequest(????);
-
-   TransactionRequest transactionRequest = TransactionRequest.makeDeployRequest(?????);
-
-   TransactionRequest transactionRequest = TransactionRequest.makeMintRequest(????);
-
-   TransactionRequest transactionRequest = TransactionRequest.makeExecuteRequest(addressContract : '', params : ['':'']);
+   Transacion transaction = transactionRequest.transaction;
 ```
-
-
 
 #### SignTransaction
 ```dart
-    /// Make Signer 
-    Signer signer = hdWallet.getSigner(signMode : SignMode.ETH, SignMode.Amino, SignMode.Direct);
-
-    /// Sign Transaction Request 
-    SignedTransaction signedTransaction = signer.signRequest (request : transactionRequest);
-
+    /// Sign Transaction
+    Transaction signedTransaction = auraWallet.signTransaction(transaction : transaction);
 ```
-
 
 #### SendTransaction
 ```dart
-    /// Make Signer 
-    Sender sender = chain.getSender()
-
-    /// Submit transaction request
-    TransactionDetail transactionDetail = sender.submitTransaction(transactionRequest : transactionRequest);
-
-    print(transactionDetail.txHash);
+     /// Send Transaction
+    String txHash = auraWallet.sendRawTransaction(signedTransaction : signedTransaction);
+    print(txHash);
 ```
-
-
-
-#### Aura Chain
-```dart
-    Chain chain = AuraCosmos.dev;
-    Chain chain = AuraCosmos.serenity;
-    Chain chain = AuraCosmos.euphoria;
-    Chain chain = AuraCosmos.xstaxy;
-
-    Chain chain = AuraEvm.dev;
-    Chain chain = AuraEvm.serenity;
-    Chain chain = AuraEvm.euphoria;
-    Chain chain = AuraEvm.xstaxy;
-
-    Chain chain = AuraChain.custom( .... );
-
-    chain.getWalletBalance(address:'');
-    chain.getTransactionHistory(address : '');
-    chain.getBlockDetail(txHash : '');
-    
-```
-
-
-
-
-#### AuraWallet
-```dart
-    AuraWallet auraWallet = AuraWallet.create(hdWallet : hdWallet, AuraChain chain );
-    AuraWallet auraWallet = AuraWallet.random();
-    AuraWallet auraWallet = AuraWallet.fromPrivateKey(privateKey : '');
-    auraWallet.getAddress();
-    auraWallet.getPrivateKey();
-    auraWallet.getSigner();
-```
-
 
 
 

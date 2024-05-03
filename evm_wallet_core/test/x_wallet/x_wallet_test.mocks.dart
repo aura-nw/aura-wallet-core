@@ -3,16 +3,16 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
-import 'dart:typed_data' as _i6;
+import 'dart:async' as _i4;
+import 'dart:typed_data' as _i7;
 
-import 'package:evm_wallet_core/src/crypto/chain/chain.dart' as _i2;
-import 'package:evm_wallet_core/src/hd_wallet/hd_wallet.dart' as _i7;
-import 'package:evm_wallet_core/src/model/transaction/transaction_detail.dart'
-    as _i5;
+import 'package:evm_wallet_core/src/core/chain.dart' as _i3;
+import 'package:evm_wallet_core/src/core/hd_wallet.dart' as _i8;
+import 'package:evm_wallet_core/src/core/transaction_detail.dart'
+    as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i4;
-import 'package:web3dart/web3dart.dart' as _i8;
+import 'package:mockito/src/dummies.dart' as _i5;
+import 'package:web3dart/web3dart.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,23 +27,33 @@ import 'package:web3dart/web3dart.dart' as _i8;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-/// A class which mocks [EvmChain].
+class _FakeEthPrivateKey_0 extends _i1.SmartFake implements _i2.EthPrivateKey {
+  _FakeEthPrivateKey_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+/// A class which mocks [Chain].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
-  MockEvmChain() {
+class MockChain extends _i1.Mock implements _i3.Chain {
+  MockChain() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<String> getWalletBalance({required String? address}) =>
+  _i4.Future<String> getWalletBalance({required String? address}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getWalletBalance,
           [],
           {#address: address},
         ),
-        returnValue: _i3.Future<String>.value(_i4.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i5.dummyValue<String>(
           this,
           Invocation.method(
             #getWalletBalance,
@@ -51,10 +61,10 @@ class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
             {#address: address},
           ),
         )),
-      ) as _i3.Future<String>);
+      ) as _i4.Future<String>);
 
   @override
-  _i3.Future<_i5.TransactionDetail?> getTransactionDetail(
+  _i4.Future<_i6.TransactionDetail?> getTransactionDetail(
           {required String? txHash}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -62,19 +72,18 @@ class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
           [],
           {#txHash: txHash},
         ),
-        returnValue: _i3.Future<_i5.TransactionDetail?>.value(),
-      ) as _i3.Future<_i5.TransactionDetail?>);
+        returnValue: _i4.Future<_i6.TransactionDetail?>.value(),
+      ) as _i4.Future<_i6.TransactionDetail?>);
 
   @override
-  _i3.Future<BigInt> estimateGas({
+  _i4.Future<BigInt> estimateGas({
     String? senderAddress,
     String? toAddress,
     BigInt? value,
-    BigInt? amountOfGas,
     BigInt? gasPrice,
     BigInt? maxPriorityFeePerGas,
     BigInt? maxFeePerGas,
-    _i6.Uint8List? data,
+    _i7.Uint8List? data,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -84,14 +93,13 @@ class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
             #senderAddress: senderAddress,
             #toAddress: toAddress,
             #value: value,
-            #amountOfGas: amountOfGas,
             #gasPrice: gasPrice,
             #maxPriorityFeePerGas: maxPriorityFeePerGas,
             #maxFeePerGas: maxFeePerGas,
             #data: data,
           },
         ),
-        returnValue: _i3.Future<BigInt>.value(_i4.dummyValue<BigInt>(
+        returnValue: _i4.Future<BigInt>.value(_i5.dummyValue<BigInt>(
           this,
           Invocation.method(
             #estimateGas,
@@ -100,7 +108,6 @@ class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
               #senderAddress: senderAddress,
               #toAddress: toAddress,
               #value: value,
-              #amountOfGas: amountOfGas,
               #gasPrice: gasPrice,
               #maxPriorityFeePerGas: maxPriorityFeePerGas,
               #maxFeePerGas: maxFeePerGas,
@@ -108,57 +115,86 @@ class MockEvmChain extends _i1.Mock implements _i2.EvmChain {
             },
           ),
         )),
-      ) as _i3.Future<BigInt>);
+      ) as _i4.Future<BigInt>);
 
   @override
-  _i3.Future<BigInt> getChainId() => (super.noSuchMethod(
+  _i4.Future<BigInt> getChainId() => (super.noSuchMethod(
         Invocation.method(
           #getChainId,
           [],
         ),
-        returnValue: _i3.Future<BigInt>.value(_i4.dummyValue<BigInt>(
+        returnValue: _i4.Future<BigInt>.value(_i5.dummyValue<BigInt>(
           this,
           Invocation.method(
             #getChainId,
             [],
           ),
         )),
-      ) as _i3.Future<BigInt>);
+      ) as _i4.Future<BigInt>);
 
   @override
-  _i3.Future<String> sendRawTransaction(_i6.Uint8List? signedTransaction) =>
+  _i4.Future<String> sendRawTransaction(
+          {required _i7.Uint8List? signedTransaction}) =>
       (super.noSuchMethod(
         Invocation.method(
           #sendRawTransaction,
-          [signedTransaction],
+          [],
+          {#signedTransaction: signedTransaction},
         ),
-        returnValue: _i3.Future<String>.value(_i4.dummyValue<String>(
+        returnValue: _i4.Future<String>.value(_i5.dummyValue<String>(
           this,
           Invocation.method(
             #sendRawTransaction,
-            [signedTransaction],
+            [],
+            {#signedTransaction: signedTransaction},
           ),
         )),
-      ) as _i3.Future<String>);
+      ) as _i4.Future<String>);
 
   @override
-  _i3.Future<int> getNonce({required String? address}) => (super.noSuchMethod(
+  _i4.Future<int> getNonce({required String? address}) => (super.noSuchMethod(
         Invocation.method(
           #getNonce,
           [],
           {#address: address},
         ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
+
+  @override
+  _i4.Future<_i7.Uint8List> signTransaction({
+    required _i2.Credentials? cred,
+    required _i2.Transaction? transaction,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #signTransaction,
+          [],
+          {
+            #cred: cred,
+            #transaction: transaction,
+          },
+        ),
+        returnValue: _i4.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),
+      ) as _i4.Future<_i7.Uint8List>);
 }
 
 /// A class which mocks [HDWallet].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHDWallet extends _i1.Mock implements _i7.HDWallet {
+class MockHDWallet extends _i1.Mock implements _i8.HDWallet {
   MockHDWallet() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  _i2.EthPrivateKey get credential => (super.noSuchMethod(
+        Invocation.getter(#credential),
+        returnValue: _FakeEthPrivateKey_0(
+          this,
+          Invocation.getter(#credential),
+        ),
+      ) as _i2.EthPrivateKey);
 
   @override
   String getAddress() => (super.noSuchMethod(
@@ -166,7 +202,7 @@ class MockHDWallet extends _i1.Mock implements _i7.HDWallet {
           #getAddress,
           [],
         ),
-        returnValue: _i4.dummyValue<String>(
+        returnValue: _i5.dummyValue<String>(
           this,
           Invocation.method(
             #getAddress,
@@ -176,44 +212,11 @@ class MockHDWallet extends _i1.Mock implements _i7.HDWallet {
       ) as String);
 
   @override
-  _i3.Future<_i6.Uint8List> signMessage(
-    _i6.Uint8List? message, {
-    int? chainId,
-    bool? isEIP1559 = false,
-  }) =>
-      (super.noSuchMethod(
+  _i4.Future<_i7.Uint8List> getPrivateKey() => (super.noSuchMethod(
         Invocation.method(
-          #signMessage,
-          [message],
-          {
-            #chainId: chainId,
-            #isEIP1559: isEIP1559,
-          },
+          #getPrivateKey,
+          [],
         ),
-        returnValue: _i3.Future<_i6.Uint8List>.value(_i6.Uint8List(0)),
-      ) as _i3.Future<_i6.Uint8List>);
-
-  @override
-  _i3.Future<bool> verifySignature(
-    _i6.Uint8List? message,
-    _i6.Uint8List? signature,
-    _i8.EthereumAddress? address, {
-    int? chainId,
-    bool? isEIP1559 = false,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #verifySignature,
-          [
-            message,
-            signature,
-            address,
-          ],
-          {
-            #chainId: chainId,
-            #isEIP1559: isEIP1559,
-          },
-        ),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<_i7.Uint8List>.value(_i7.Uint8List(0)),
+      ) as _i4.Future<_i7.Uint8List>);
 }

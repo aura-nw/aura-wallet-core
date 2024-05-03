@@ -1,14 +1,18 @@
-import 'package:evm_wallet_core/src/crypto/signer/eth_signer.dart';
+import 'dart:typed_data';
+
 import 'package:hex/hex.dart';
 import 'package:web3dart/web3dart.dart';
 
-import '../crypto/utils/bip_32.dart';
-import '../crypto/utils/bip_39.dart';
+import 'crypto/bip_32.dart';
+import 'crypto/bip_39.dart';
 
-class HDWallet extends EthSigner {
+class HDWallet {
   static const derivationPath = "m/44'/60'/0'/0/0";
 
-  HDWallet._(Credentials credentials) : super(credentials);
+  final EthPrivateKey _credentials;
+  EthPrivateKey get credential => _credentials;
+
+  HDWallet._(EthPrivateKey credentials) : _credentials = credentials;
 
   factory HDWallet.fromMnemonic(List<String> mnemonic) {
     // Convert the mnemonic to a BIP32 instance
@@ -18,19 +22,27 @@ class HDWallet extends EthSigner {
     // Get the node from the derivation path
     final derivedNode = root.derivePath(derivationPath);
 
-    Credentials credentials =
+    EthPrivateKey credentials =
         EthPrivateKey.fromHex(HEX.encode(derivedNode.privateKey!));
 
     return HDWallet._(credentials);
   }
 
   factory HDWallet.fromPrivateKey(String privateKey) {
-    Credentials credentials = EthPrivateKey.fromHex(privateKey);
+    EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
     return HDWallet._(credentials);
   }
 
   factory HDWallet.random() {
     final mnemonic = Bip39.generateMnemonic();
     return HDWallet.fromMnemonic(mnemonic);
+  }
+
+  String getAddress() {
+    return _credentials.address.hex;
+  }
+
+  Future<Uint8List> getPrivateKey() async {
+    return _credentials.privateKey;
   }
 }
