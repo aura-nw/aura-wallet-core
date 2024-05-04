@@ -22,6 +22,13 @@ class AuraWallet {
     return AuraWallet(chain: chain, hdWallet: hdWallet);
   }
 
+  factory AuraWallet.fromMnemonic(
+      {required List<String> mnemonic, required String rpcUrl}) {
+    final chain = Chain.from(rpcUrl: rpcUrl);
+    final hdWallet = HDWallet.fromMnemonic(mnemonic);
+    return AuraWallet(chain: chain, hdWallet: hdWallet);
+  }
+
   /// Retrieves the balance of the address associated with the HD wallet.
   ///
   /// Returns a [Future<String>] containing the balance as a string representation.
@@ -34,6 +41,10 @@ class AuraWallet {
   /// Returns a [Future<int>] containing the nonce value.
   Future<int> getNonce() async {
     return chain.getNonce(address: hdWallet.getAddress());
+  }
+
+  String getAddress() {
+    return hdWallet.getAddress();
   }
 
   /// Signs a provided `Transaction` object using the HD wallet's private key.

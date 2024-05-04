@@ -25,7 +25,8 @@ void main() {
     expect(walletFromMnemonic.getAddress(), walletFromPrivateKey.getAddress());
 
     // Test random
-    HDWallet randomWallet = HDWallet.random();
+    List<String> randomMnemonic = HDWallet.randomMnemonic();
+    HDWallet randomWallet = HDWallet.fromMnemonic(randomMnemonic);
     expect(randomWallet, isNotNull);
 
     // Test getAddress
@@ -33,7 +34,7 @@ void main() {
     expect(address, isNotNull);
 
     // Test signMessage
-    Uint8List message = Uint8List.fromList([1, 2, 3]);
+    // Uint8List message = Uint8List.fromList([1, 2, 3]);
     // // Uint8List signature = await walletFromMnemonic.signMessage(message);
     // expect(signature, isNotNull);
 

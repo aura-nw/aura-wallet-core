@@ -22,4 +22,12 @@ void main() {
     print('from ${detail?.from}');
     expect(detail, isNotNull);
   });
+
+  test('Check ChainId', () async {
+    final chain = Chain.from(rpcUrl: rpcUrl);
+    final chainId = await chain.getChainId();
+
+    print('ChainId: $chainId');
+    expect(chainId, isNotNull);
+  });
 }

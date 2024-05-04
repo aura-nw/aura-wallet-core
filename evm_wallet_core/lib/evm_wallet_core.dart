@@ -5,6 +5,9 @@ import 'dart:typed_data';
 import 'package:evm_wallet_core/src/core/chain.dart';
 import 'package:evm_wallet_core/src/core/hd_wallet.dart';
 
+export 'src/core/chain.dart';
+export 'src/core/hd_wallet.dart';
+
 /// A Calculator.
 class Calculator {
   /// Returns [value] plus 1.
@@ -16,13 +19,11 @@ class Calculator {
     chain.getWalletBalance(address: '');
     chain.getTransactionDetail(txHash: '');
     chain.getChainId();
-    chain.sendRawTransaction(signedTransaction:  Uint8List(0));
+    chain.sendRawTransaction(signedTransaction: Uint8List(0));
     chain.getNonce(address: '');
-    
 
     HDWallet hdWallet = HDWallet.fromPrivateKey('');
     hdWallet.getAddress();
     hdWallet.getPrivateKey();
-
   }
 }

@@ -33,9 +33,8 @@ class HDWallet {
     return HDWallet._(credentials);
   }
 
-  factory HDWallet.random() {
-    final mnemonic = Bip39.generateMnemonic();
-    return HDWallet.fromMnemonic(mnemonic);
+  static List<String> randomMnemonic() {
+    return Bip39.generateMnemonic();
   }
 
   String getAddress() {
